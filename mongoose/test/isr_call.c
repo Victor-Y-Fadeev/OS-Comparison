@@ -48,7 +48,6 @@ static void task(void *arg) {
 
     if (current == ITER) {
         output("Call ISR test", var, true);
-
         mgos_clear_timer(timer);
     }
 }

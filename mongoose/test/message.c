@@ -34,6 +34,15 @@ struct mbuf msg_mbuf;
 
 
 static void task_1(void *arg) {
+    if (flag == 0) {
+        return;
+    }
+
+    const int msg = *msg_mbuf.buf;
+    mbuf_remove(&msg_mbuf, sizeof(int));
+}
+
+static void task_2(void *arg) {
     const int msg = 0;
 
     if (flag == 0) {
@@ -54,15 +63,6 @@ static void task_1(void *arg) {
         mgos_clear_timer(timer_1);
         mgos_clear_timer(timer_2);
     }
-}
-
-static void task_2(void *arg) {
-    if (flag == 0) {
-        return;
-    }
-
-    const int msg = *msg_mbuf.buf;
-    mbuf_remove(&msg_mbuf, sizeof(int));
 }
 
 enum mgos_app_init_result mgos_app_init(void) {

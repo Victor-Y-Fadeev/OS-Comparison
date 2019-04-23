@@ -16,12 +16,9 @@
  */
 
 #include "mgos.h"
-#include "mgos_event.h"
 #include "mgos_timers.h"
 #include "mgos_time.h"
 #include "environment.h"
-
-#define EVENT_ISR MGOS_EVENT_BASE('I', 'S', 'R')
 
 static int var[ITER];
 static int current = 0;
@@ -31,30 +28,32 @@ static long long int cur_time = 0;
 
 static mgos_timer_id timer;
 
+struct mbuf msg_mbuf;
 
-static void isr_cb(int ev, void *ev_data, void *userdata) {
-    (void) ev;
-    (void) ev_data;
-    (void) userdata;
-}
 
 static void task(void *arg) {
+    int msg = 0;
+
+    mbuf_append(&msg_mbuf, &msg, sizeof(int));
+
     prev_time = mgos_uptime_micros();
-    mgos_event_trigger(EVENT_ISR, NULL);
+    msg = *msg_mbuf.buf;
+    mbuf_remove(&msg_mbuf, sizeof(int));
     cur_time = mgos_uptime_micros();
 
     var[current] = cur_time - prev_time;
     current++;
 
     if (current == ITER) {
-        output("ISR test", var, true);
+        output("Receive message test", var, true);
+
+        mbuf_free(&msg_mbuf);
         mgos_clear_timer(timer);
     }
 }
 
 enum mgos_app_init_result mgos_app_init(void) {
-    mgos_event_register_base(EVENT_ISR, "Test ISR");
-    mgos_event_add_handler(EVENT_ISR, isr_cb, NULL);
+    mbuf_init(&msg_mbuf, 0);
 
     timer = mgos_set_timer(0, MGOS_TIMER_REPEAT, task, NULL);
 
