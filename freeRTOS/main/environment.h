@@ -15,11 +15,16 @@
  * limitations under the License.
  */
 
+#ifndef ENVIRONMENT_H
+#define ENVIRONMENT_H
+
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+
+#define ITER 100
 
 
-void app_main()
-{
-    return;
-}
+void output(const char *str, const int *var, const bool log);
+void single(const char *str, const double average);
+void error(const char *str);
+
+#endif
