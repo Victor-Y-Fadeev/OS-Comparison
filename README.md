@@ -1,28 +1,29 @@
 ![logo](https://drive.google.com/uc?export=view&id=1SHy_P1BS9dv5h0lkyDwRzsFg1-hIbg2Z)
-=====================================================================================
+# OS Comparison
+This repository contain the list of tests for comparing real time operating systems.
+
+At the research comparing [FreeRTOS](https://www.freertos.org/) and [Mongoose OS](https://mongoose-os.com/) by this parameters:
+ - Processes speed
+ - Interrupts
+ - Semaphores
+ - Messages
+ - Firmware size
+
+As a hardware using ESP32 microprocessor. Testing board was IoTik 32A v2.0 of [MGBot](https://mgbot.ru/) company.
 
 ## Installing environment
-To download `esp32` toolchain for [FreeRTOS](https://www.freertos.org/), use the script:
+To download `esp32` [toolchain](https://demo-dijiudu.readthedocs.io/en/latest/) for FreeRTOS, use the script:
 ```
 $ ./scripts/freeRTOS.sh
 ```
-
-At the next step install `mos` the [Mongoose OS](https://mongoose-os.com/) tool:
+At the next step install `mos` the Mongoose OS [tool](https://mongoose-os.com/docs/mongoose-os/quickstart/setup.md):
 ```
 $ ./scripts/mongoose.sh
 ```
-
-Now you can configure `minicom` by yourself as:
- - Serial device `/dev/ttyUSB0`
- - Hardware flow control: `no`
- - Software flow control: `no`
- - Save your configuration as `esp32`
-
-Or use the next line to do this automatically:
+Now you can automatically configure `minicom`, use the line:
 ```
 $ sudo echo -e 'pu port /dev/ttyUSB0\npu rtscts No' > ~/.minirc.esp32
 ```
-
 After this you should restart your user session to complete installation. You can use this command:
 ```
 $ pkill -KILL -u $USER
@@ -37,17 +38,7 @@ Enter at the `./freeRTOS` folder first time and set sdkconfig as a defaults by:
 $ cd freeRTOS
 $ make defconfig
 ```
-You can change settings by:
-```
-$ make menuconfig
-```
-But then you get incorrect research results.
-
-To build your test use:
-```
-$ make
-```
-Or, if you want to flash it at the controller:
+To build & flash your test at the controller use:
 ```
 $ make flash
 ```
