@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2018 Cesanta Software Limited
+ * Copyright (c) 2019 OS Research Group
  * All rights reserved
  *
  * Licensed under the Apache License, Version 2.0 (the ""License"");
@@ -18,6 +18,5 @@
 #include "mgos.h"
 
 enum mgos_app_init_result mgos_app_init(void) {
-  LOG(LL_INFO, ("Hi there"));
-  return MGOS_APP_INIT_SUCCESS;
+    return MGOS_APP_INIT_SUCCESS;
 }
