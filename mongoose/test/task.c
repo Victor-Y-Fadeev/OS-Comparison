@@ -16,8 +16,17 @@
  */
 
 #include "mgos.h"
+#include "mgos_timers.h"
 
+static mgos_timer_id timer;
+
+
+static void task(void *arg) {
+    mgos_clear_timer(timer);
+}
 
 enum mgos_app_init_result mgos_app_init(void) {
+    timer = mgos_set_timer(0, MGOS_TIMER_REPEAT, task, NULL);
+
     return MGOS_APP_INIT_SUCCESS;
 }

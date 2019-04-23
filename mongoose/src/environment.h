@@ -15,9 +15,18 @@
  * limitations under the License.
  */
 
+#ifndef ENVIRONMENT_H_
+#define ENVIRONMENT_H_
+
 #include "mgos.h"
+#include "mgos_uart.h"
+
+#define UART_NO 0
+#define ITER 100
 
 
-enum mgos_app_init_result mgos_app_init(void) {
-    return MGOS_APP_INIT_SUCCESS;
-}
+void output(const char *str, const int *var, const bool log);
+void single(const char *str, const double average);
+void error(const char *str);
+
+#endif
