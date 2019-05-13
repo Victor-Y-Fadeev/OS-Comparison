@@ -17,50 +17,46 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/timers.h"
+#include "freertos/semphr.h"
 #include "environment.h"
 
 static int var[ITER];
 static int current = 0;
+static int flag = 0;
 
 static long long int prevTime = 0;
 static long long int curTime = 0;
-static bool flag = 0;
 
-TimerHandle_t xTimers[2];
+static SemaphoreHandle_t xMutex = NULL;
 
-
-static void task1(void *arg)
+void vTask(void *pvParameters)
 {
-    flag = 1;
-    prevTime = esp_timer_get_time();
-}
+    while (current <= ITER) {
+        xSemaphoreTake(xMutex, 0);
 
-static void task2(void *arg)
-{
-    if (flag == 0)
-    {
-        return;
+        prevTime = esp_timer_get_time();
+        xSemaphoreGive(xMutex);
+        curTime = esp_timer_get_time();
+
+        var[current] = curTime - prevTime;
+        current++;
+            
+        if(current == ITER)
+        {
+            output("Give semaphore test", var, true);
+
+            vTaskDelete(NULL);
+        }
     }
 
-    curTime = esp_timer_get_time();
-    var[current] = curTime - prevTime;
-    current++;
-    flag = 0;
-
-    if (current == ITER)
-    {
-        output("Timers test switching", var, true);
-
-        xTimerStop(xTimers[0], 0);
-        xTimerStop(xTimers[1], 0);
-    }
+    vTaskDelete(NULL);
 }
 
-void app_main()
+void app_main(void)
 {
-    xTimers[0] = xTimerCreate("Timer 1", 1, pdTRUE, (void *) 0, task1);
-    xTimers[1] = xTimerCreate("Timer 2", 1, pdTRUE, (void *) 0, task2);
+    xMutex = xSemaphoreCreateRecursiveMutex();
 
-    xTimerStart(xTimers[0], 0);
-    xTimerStart(xTimers[1], 0);
+    if (xMutex != NULL) {
+        xTaskCreate(vTask, "Task", 10000, NULL, 1, NULL);
+    }
 }
