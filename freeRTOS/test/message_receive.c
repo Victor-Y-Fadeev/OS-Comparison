@@ -46,7 +46,7 @@ void vTask(void *pvParameters)
         {
             if (massageReceive == 0)
             {
-                error("Massage failed");
+                error("Massage failed!");
             }
             massageReceive = 0;
 
@@ -65,7 +65,7 @@ void vTask(void *pvParameters)
 
 void app_main(void)
 {
-     xQueue = xQueueCreate(1, sizeof(int));
+    xQueue = xQueueCreate(1, sizeof(int));
 
     if (xQueue != NULL) 
     {

@@ -69,7 +69,7 @@ void vTask2 (void *pvParameters)
 
 void app_main(void)
 {
-     xQueue = xQueueCreate(1, sizeof(int));
+    xQueue = xQueueCreate(1, sizeof(int));
 
     if (xQueue != NULL) 
     {

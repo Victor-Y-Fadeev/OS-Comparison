@@ -17,49 +17,70 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/timers.h"
+#include "freertos/semphr.h"
 #include "environment.h"
 
 static int var[ITER];
 static int current = 0;
+static int flag = 0;
 
 static long long int prevTime = 0;
 static long long int curTime = 0;
 
+static SemaphoreHandle_t xMutex = NULL;
+
 
 void vTask1(void *pvParameters)
 {
-    while (current < ITER) 
+    int average = 0;
+    while (current <= ITER) 
     {
-        prevTime = esp_timer_get_time();
-        vTaskDelay(5);
-    }
+        if (flag == 0)
+        { 
+            flag = 1;
+            prevTime = esp_timer_get_time();
+            xSemaphoreTake(xMutex, 0);
+        }
+        else 
+        {   
+            flag = 0;
+            xSemaphoreGive(xMutex);
+            curTime = esp_timer_get_time();
 
+            var[current] = curTime - prevTime;
+            current++;
+
+            if (current == ITER)
+            {
+                output("Full semaphore test", var, true);
+                vTaskDelete(NULL);
+            }    
+        }
+    }
+    
     vTaskDelete(NULL);
 }
 
 void vTask2(void *pvParameters)
 {
-    int average = 0;
-
-    while (current < ITER) 
+    while (current < ITER + 1) 
     {
-        if (prevTime != 0) 
+        if ((flag == 1) && (xSemaphoreTake(xMutex,0) == pdPASS))
         {
-            curTime = esp_timer_get_time();
-            var[current] = curTime - prevTime;
-            average += var[current];
-            prevTime = 0;
-            current++;
+            error("Semaphore failed!");
         }
     }
 
-    output("Processes switching test", var, true);
-    
     vTaskDelete(NULL);
 }
 
 void app_main(void)
 {
-    xTaskCreate(vTask1, "Task1", 10000, NULL, 2, NULL);
-    xTaskCreate(vTask2, "Task2", 10000, NULL, 1, NULL);
+    xMutex = xSemaphoreCreateRecursiveMutex();
+
+    if (xMutex != NULL) 
+    {
+        xTaskCreate(vTask1, "Task1", 10000, NULL, 1, NULL);
+        xTaskCreate(vTask2, "Task2", 10000, NULL, 1, NULL);
+    }
 }
