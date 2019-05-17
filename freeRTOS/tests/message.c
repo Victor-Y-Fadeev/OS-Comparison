@@ -29,22 +29,23 @@ static xQueueHandle xQueue = NULL;
 
 void vTask1(void *pvParameters)
 {
-    char* masage = "masage";
+    int massage = 0;
     portBASE_TYPE xStatus;
 
-    while (current <= ITER) {
-        xStatus = xQueueReceive( xQueue, &masage, 0);
+    while (current <= ITER) 
+    {
+        xStatus = xQueueReceive(xQueue, &massage, 0);
         curTime = esp_timer_get_time();
 
-        if( xStatus == pdPASS)
+        if (xStatus == pdPASS)
         {
             var[current] = curTime - prevTime;
             current++;
 
-            if(current == ITER)
+            if (current == ITER)
             {
-            output("Full message test", var, true);
-            vTaskDelete(NULL);
+                output("Full message test", var, true);
+                vTaskDelete(NULL);
             }
             
         }
@@ -52,27 +53,26 @@ void vTask1(void *pvParameters)
     vTaskDelete(NULL);
 }
 
-void vTask2 (void *pvParameters)y
+void vTask2 (void *pvParameters)
 {
-    char* masage = "masage";
+    int massage = 255;
   
-    while (current <= ITER) {
+    while (current <= ITER) 
+    {
         prevTime = esp_timer_get_time();
-        xQueueSendToBack(xQueue, &masage,0);
+        xQueueSendToBack(xQueue, &massage,0);
     }
 
     vTaskDelete(NULL);
 }
 
-
-
 void app_main(void)
 {
      xQueue = xQueueCreate(1, sizeof(char*));
 
-    if (xQueue != NULL) {
+    if (xQueue != NULL) 
+    {
         xTaskCreate(vTask1, "Task1", 10000, NULL, 1, NULL);
         xTaskCreate(vTask2, "Task2", 10000, NULL, 1, NULL);
     }
 }
-

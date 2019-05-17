@@ -22,41 +22,29 @@
 static long long int prevTime = 0;
 static long long int curTime = 0;
 
-static int doSomething(int n)
-{
-    int k = n;
-    for(int i = 0; i < 100; i++) {
-        k = (k * n) % 1000;
-    }
 
-    return k;
-}
-
-static void vTask(void *arg)
+static void vTask(void *pvParameters)
 {
-    int n = 5;
     double average = 0;
 
     prevTime = esp_timer_get_time();
-    for(int i = 0; i < ITER; i++) {
-        n = doSomething(n);
+    for(int i = 0; i < ITER; i++) 
+    {
         portYIELD_FROM_ISR();
-        n = doSomething(n);
     }
     curTime = esp_timer_get_time();
 
     average = curTime - prevTime;
 
     prevTime = esp_timer_get_time();
-    for(int i = 0; i < ITER; i++) {
-        n = doSomething(n);
-        n = doSomething(n);
+    for(int i = 0; i < ITER; i++) 
+    {
     }
     curTime = esp_timer_get_time();
 
-    average = (average - curTime + prevTime)/ITER;
+    average = (average - curTime + prevTime) / ITER;
   
-    single("Irc test", average);
+    single("ISR test", average);
 
     vTaskDelete(NULL);
 }

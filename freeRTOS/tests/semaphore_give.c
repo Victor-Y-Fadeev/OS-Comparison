@@ -29,9 +29,11 @@ static long long int curTime = 0;
 
 static SemaphoreHandle_t xMutex = NULL;
 
+
 void vTask(void *pvParameters)
 {
-    while (current <= ITER) {
+    while (current <= ITER) 
+    {
         xSemaphoreTake(xMutex, 0);
 
         prevTime = esp_timer_get_time();
@@ -41,10 +43,9 @@ void vTask(void *pvParameters)
         var[current] = curTime - prevTime;
         current++;
             
-        if(current == ITER)
+        if (current == ITER)
         {
             output("Give semaphore test", var, true);
-
             vTaskDelete(NULL);
         }
     }
@@ -56,7 +57,8 @@ void app_main(void)
 {
     xMutex = xSemaphoreCreateRecursiveMutex();
 
-    if (xMutex != NULL) {
+    if (xMutex != NULL) 
+    {
         xTaskCreate(vTask, "Task", 10000, NULL, 1, NULL);
     }
 }

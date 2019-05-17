@@ -29,10 +29,12 @@ static long long int curTime = 0;
 
 static SemaphoreHandle_t xMutex = NULL;
 
+
 void vTask1(void *pvParameters)
 {
     int average = 0;
-    while (current <= ITER) {
+    while (current <= ITER) 
+    {
         if (flag == 0)
         { 
             flag = 1;
@@ -48,10 +50,9 @@ void vTask1(void *pvParameters)
             var[current] = curTime - prevTime;
             current++;
 
-            if(current == ITER)
+            if (current == ITER)
             {
-                output("Full semaphore test",var, true);
-
+                output("Full semaphore test", var, true);
                 vTaskDelete(NULL);
             }    
         }
@@ -62,10 +63,10 @@ void vTask1(void *pvParameters)
 void vTask2 (void *pvParameters)
 {
   
-    while (current < ITER + 1) {
-        if((flag == 1 ) && (xSemaphoreTake(xMutex,0) == pdPASS))
-        error("semafore");
-
+    while (current < ITER + 1) 
+    {
+        if ((flag == 1) && (xSemaphoreTake(xMutex,0) == pdPASS))
+            error("semaphore");
     }
 
     vTaskDelete(NULL);
@@ -75,7 +76,8 @@ void app_main(void)
 {
     xMutex = xSemaphoreCreateRecursiveMutex();
 
-    if (xMutex != NULL) {
+    if (xMutex != NULL) 
+    {
         xTaskCreate(vTask1, "Task1", 10000, NULL, 1, NULL);
         xTaskCreate(vTask2, "Task2", 10000, NULL, 1, NULL);
     }

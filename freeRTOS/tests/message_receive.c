@@ -27,26 +27,28 @@ static long long int curTime = 0;
 
 static xQueueHandle xQueue = NULL;
 
+
 void vTask(void *pvParameters)
 {
-    int masageSend = 1;
-    int masageReceive = 0;
+    int massageSend = 1;
+    int massageReceive = 0;
     portBASE_TYPE xStatus;
 
-    while (current <= ITER) {
+    while (current <= ITER) 
+    {
         xQueueSendToBack(xQueue, &masageSend, 0);
 
         prevTime = esp_timer_get_time();
         xStatus = xQueueReceive( xQueue, &masageReceive, 0);
         curTime = esp_timer_get_time();
 
-        if(xStatus == pdPASS)
+        if (xStatus == pdPASS)
         {
-            if(masageReceive == 0)
+            if (massageReceive == 0)
             {
                 error("masage receive");
             }
-            masageReceive = 0;
+            massageReceive = 0;
 
             var[current] = curTime - prevTime;
             current++;
@@ -67,7 +69,8 @@ void app_main(void)
 {
      xQueue = xQueueCreate(1, sizeof(char*));
 
-    if (xQueue != NULL) {
+    if (xQueue != NULL) 
+    {
         xTaskCreate(vTask, "Task", 10000, NULL, 1, NULL);
     }
 }

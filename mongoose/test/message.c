@@ -40,29 +40,30 @@ static void task_1(void *arg) {
 
     const int msg = *msg_mbuf.buf;
     mbuf_remove(&msg_mbuf, sizeof(int));
-}
+    cur_time = mgos_uptime_micros();
 
-static void task_2(void *arg) {
-    const int msg = 0;
+    flag = 0;
 
-    if (flag == 0) {
-        flag = 1;
-        prev_time = mgos_uptime_micros();
-        mbuf_append(&msg_mbuf, &msg, sizeof(int));
-    } else {
-        flag = 0;
-        cur_time = mgos_uptime_micros();
-        var[current] = cur_time - prev_time;
-        current++;
-    }
+    var[current] = cur_time - prev_time;
+    current++;
 
     if (current == ITER) {
         output("Full message test", var, true);
 
         mbuf_free(&msg_mbuf);
-        mgos_clear_timer(timer_1);
         mgos_clear_timer(timer_2);
+        mgos_clear_timer(timer_1);
     }
+}
+
+static void task_2(void *arg) {
+    const int msg = 255;
+
+    if (flag == 0) {
+        flag = 1;
+        prev_time = mgos_uptime_micros();
+        mbuf_append(&msg_mbuf, &msg, sizeof(int));
+    } 
 }
 
 enum mgos_app_init_result mgos_app_init(void) {
