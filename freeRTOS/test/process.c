@@ -19,50 +19,47 @@
 #include "freertos/timers.h"
 #include "environment.h"
 
-#define NUM_TIMERS 2
-
 static int var[ITER];
 static int current = 0;
 
 static long long int prevTime = 0;
 static long long int curTime = 0;
-static bool flag = 0;
-
-TimerHandle_t xTimers[NUM_TIMERS];
 
 
-static void vTask1(void *pvParameters)
+void vTask1(void *pvParameters)
 {
-    flag = 1;
-    prevTime = esp_timer_get_time();
-}
-
-static void vTask2(void *pvParameters)
-{
-    if (flag == 0)
+    while (current < ITER) 
     {
-        return;
+        prevTime = esp_timer_get_time();
+        vTaskDelay(5);
     }
 
-    curTime = esp_timer_get_time();
-    var[current] = curTime - prevTime;
-    current++;
-    flag = 0;
-
-    if (current == ITER)
-    {
-        output("Timers test switching", var, true);
-
-        xTimerStop(xTimers[0], 0);
-        xTimerStop(xTimers[1], 0);
-    }
+    vTaskDelete(NULL);
 }
 
-void app_main()
+void vTask2(void *pvParameters)
 {
-    xTimers[0] = xTimerCreate("Timer 1", 1, pdTRUE, (void *) 0, task1);
-    xTimers[1] = xTimerCreate("Timer 2", 1, pdTRUE, (void *) 0, task2);
+    int average = 0;
+    
+    while (current < ITER) 
+    {
+        if (prevTime != 0) 
+        {
+            curTime = esp_timer_get_time();
+            var[current] = curTime - prevTime;
+            average += var[current];
+            prevTime = 0;
+            current++;
+        }
+    }
 
-    xTimerStart(xTimers[0], 0);
-    xTimerStart(xTimers[1], 0);
+    output("Processes switching test", var, true);
+    
+    vTaskDelete(NULL);
+}
+
+void app_main(void)
+{
+    xTaskCreate(vTask1, "Task1", 10000, NULL, 2, NULL);
+    xTaskCreate(vTask2, "Task2", 10000, NULL, 1, NULL);
 }

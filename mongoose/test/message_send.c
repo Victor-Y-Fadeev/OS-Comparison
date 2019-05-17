@@ -32,7 +32,7 @@ struct mbuf msg_mbuf;
 
 
 static void task(void *arg) {
-    int msg = 0;
+    int msg = 255;
 
     prev_time = mgos_uptime_micros();
     mbuf_append(&msg_mbuf, &msg, sizeof(int));

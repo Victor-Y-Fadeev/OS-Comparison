@@ -19,50 +19,34 @@
 #include "freertos/timers.h"
 #include "environment.h"
 
-#define NUM_TIMERS 2
-
-static int var[ITER];
-static int current = 0;
-
 static long long int prevTime = 0;
 static long long int curTime = 0;
-static bool flag = 0;
-
-TimerHandle_t xTimers[NUM_TIMERS];
 
 
-static void vTask1(void *pvParameters)
+static void vTask(void *pvParameters)
 {
-    flag = 1;
+    double average = 0;
+
     prevTime = esp_timer_get_time();
-}
-
-static void vTask2(void *pvParameters)
-{
-    if (flag == 0)
+    for (int i = 0; i < ITER; i++) 
     {
-        return;
+        portYIELD_FROM_ISR();
     }
-
     curTime = esp_timer_get_time();
-    var[current] = curTime - prevTime;
-    current++;
-    flag = 0;
 
-    if (current == ITER)
-    {
-        output("Timers test switching", var, true);
+    average = curTime - prevTime;
 
-        xTimerStop(xTimers[0], 0);
-        xTimerStop(xTimers[1], 0);
-    }
+    prevTime = esp_timer_get_time();
+    for (int i = 0; i < ITER; i++);
+    curTime = esp_timer_get_time();
+
+    average = (average - curTime + prevTime) / ITER;
+    single("ISR test", average);
+
+    vTaskDelete(NULL);
 }
 
 void app_main()
 {
-    xTimers[0] = xTimerCreate("Timer 1", 1, pdTRUE, (void *) 0, task1);
-    xTimers[1] = xTimerCreate("Timer 2", 1, pdTRUE, (void *) 0, task2);
-
-    xTimerStart(xTimers[0], 0);
-    xTimerStart(xTimers[1], 0);
+    xTaskCreate(vTask, "Task", 10000, NULL, 1, NULL);
 }

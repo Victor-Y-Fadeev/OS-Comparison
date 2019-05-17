@@ -47,7 +47,7 @@ static void task_2(void *arg) {
     flag = 0;
 
     if (current == ITER) {
-        output("Processes test switching", var, true);
+        output("Processes switching test", var, true);
 
         mgos_clear_timer(timer_1);
         mgos_clear_timer(timer_2);

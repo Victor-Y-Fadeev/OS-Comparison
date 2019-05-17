@@ -23,9 +23,6 @@
 
 #define EVENT_ISR MGOS_EVENT_BASE('I', 'S', 'R')
 
-static int var[ITER];
-static int current = 0;
-
 static long long int prev_time = 0;
 static long long int cur_time = 0;
 
@@ -39,17 +36,24 @@ static void isr_cb(int ev, void *ev_data, void *userdata) {
 }
 
 static void task(void *arg) {
+    double average;
+
     prev_time = mgos_uptime_micros();
-    mgos_event_trigger(EVENT_ISR, NULL);
+    for (int i = 0; i < ITER; i++) {
+        mgos_event_trigger(EVENT_ISR, NULL);
+    }
     cur_time = mgos_uptime_micros();
 
-    var[current] = cur_time - prev_time;
-    current++;
+    average = curTime - prevTime;
 
-    if (current == ITER) {
-        output("ISR test", var, true);
-        mgos_clear_timer(timer);
-    }
+    prev_time = mgos_uptime_micros();
+    for (int i = 0; i < ITER; i++);
+    cur_time = mgos_uptime_micros();
+
+    average = (average - curTime + prevTime) / ITER;
+
+    single("ISR test", average);
+    mgos_clear_timer(timer);
 }
 
 enum mgos_app_init_result mgos_app_init(void) {
