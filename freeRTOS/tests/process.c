@@ -25,9 +25,11 @@ static int current = 0;
 static long long int prevTime = 0;
 static long long int curTime = 0;
 
+
 void vTask1(void *pvParameters)
 {
-    while (current < ITER) {
+    while (current < ITER) 
+    {
         prevTime = esp_timer_get_time();
         vTaskDelay(5);
     }
@@ -39,8 +41,10 @@ void vTask2(void *pvParameters)
 {
     int average = 0;
 
-    while (current < ITER) {
-        if (prevTime != 0) {
+    while (current < ITER) 
+    {
+        if (prevTime != 0) 
+        {
             curTime = esp_timer_get_time();
             var[current] = curTime - prevTime;
             average += var[current];
@@ -49,7 +53,7 @@ void vTask2(void *pvParameters)
         }
     }
 
-   output("Processes switching test", var, true);
+    output("Processes switching test", var, true);
     
     vTaskDelete(NULL);
 }

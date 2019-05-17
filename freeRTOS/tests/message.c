@@ -27,6 +27,7 @@ static long long int curTime = 0;
 
 static xQueueHandle xQueue = NULL;
 
+
 void vTask1(void *pvParameters)
 {
     int massage = 0;
@@ -68,7 +69,7 @@ void vTask2 (void *pvParameters)
 
 void app_main(void)
 {
-     xQueue = xQueueCreate(1, sizeof(char*));
+     xQueue = xQueueCreate(1, sizeof(int));
 
     if (xQueue != NULL) 
     {

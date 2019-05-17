@@ -47,8 +47,7 @@ static void task(void *arg) {
     average = curTime - prevTime;
 
     prev_time = mgos_uptime_micros();
-    for (int i = 0; i < ITER; i++) {
-    }
+    for (int i = 0; i < ITER; i++);
     cur_time = mgos_uptime_micros();
 
     average = (average - curTime + prevTime) / ITER;

@@ -40,13 +40,13 @@ void vTask(void *pvParameters)
         xQueueSendToBack(xQueue, &massageSend, 0);
         curTime = esp_timer_get_time();
 
-        xStatus = xQueueReceive( xQueue, &massageReceive, 0);
+        xStatus = xQueueReceive(xQueue, &massageReceive, 0);
 
         if (xStatus == pdPASS)
         {
             if (massageReceive == 0)
             {
-                error("massage send");
+                error("Massage failed");
             }
             massageReceive = 0;
 
@@ -66,7 +66,7 @@ void vTask(void *pvParameters)
 
 void app_main(void)
 {
-     xQueue = xQueueCreate(1, sizeof(char*));
+     xQueue = xQueueCreate(1, sizeof(int));
 
     if (xQueue != NULL) 
     {

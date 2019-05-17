@@ -28,7 +28,7 @@ static void vTask(void *pvParameters)
     double average = 0;
 
     prevTime = esp_timer_get_time();
-    for(int i = 0; i < ITER; i++) 
+    for (int i = 0; i < ITER; i++) 
     {
         portYIELD_FROM_ISR();
     }
@@ -37,13 +37,10 @@ static void vTask(void *pvParameters)
     average = curTime - prevTime;
 
     prevTime = esp_timer_get_time();
-    for(int i = 0; i < ITER; i++) 
-    {
-    }
+    for (int i = 0; i < ITER; i++);
     curTime = esp_timer_get_time();
 
     average = (average - curTime + prevTime) / ITER;
-  
     single("ISR test", average);
 
     vTaskDelete(NULL);

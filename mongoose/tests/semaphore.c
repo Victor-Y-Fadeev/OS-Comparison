@@ -37,7 +37,7 @@ static struct mgos_rlock_type *lock;
 static void task_1(void *arg) {
     if (flag == 1) {
         mgos_rlock(lock);
-        error("Semaphore failed!");
+        error("Semaphore failed");
         mgos_runlock(lock);
     }
 }

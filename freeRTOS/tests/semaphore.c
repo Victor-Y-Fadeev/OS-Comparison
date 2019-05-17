@@ -57,12 +57,12 @@ void vTask1(void *pvParameters)
             }    
         }
     }
+    
     vTaskDelete(NULL);
 }
 
 void vTask2 (void *pvParameters)
 {
-  
     while (current < ITER + 1) 
     {
         if ((flag == 1) && (xSemaphoreTake(xMutex,0) == pdPASS))
