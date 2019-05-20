@@ -34,7 +34,6 @@ static SemaphoreHandle_t xMutex = NULL;
 
 void vTask1(void *pvParameters)
 {
-    int average = 0;
     while (current <= ITER) 
     {
         if (flag == 0)
@@ -65,9 +64,9 @@ void vTask1(void *pvParameters)
 
 void vTask2(void *pvParameters)
 {
-    while (current < ITER + 1) 
+    while (current < ITER)
     {
-        if ((flag == 1) && (xSemaphoreTake(xMutex,0) == pdPASS))
+        if ((flag == 1) && (xSemaphoreTake(xMutex, 0) == pdPASS))
         {
             error("Semaphore failed!");
         }
@@ -82,7 +81,7 @@ void app_main(void)
 
     if (xMutex != NULL) 
     {
-        xTaskCreate(vTask1, "Task1", 10000, NULL, 1, NULL);
-        xTaskCreate(vTask2, "Task2", 10000, NULL, 1, NULL);
+        xTaskCreate(vTask1, "Task 1", 10000, NULL, 1, NULL);
+        xTaskCreate(vTask2, "Task 2", 10000, NULL, 1, NULL);
     }
 }

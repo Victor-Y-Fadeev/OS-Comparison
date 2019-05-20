@@ -19,7 +19,7 @@
 #include "freertos/timers.h"
 #include "environment.h"
 
-#define ITER 100
+#define ITER 1000
 
 static long long int prevTime = 0;
 static long long int curTime = 0;

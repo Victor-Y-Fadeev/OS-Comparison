@@ -61,8 +61,8 @@ static void vTask2(void *pvParameters)
 
 void app_main()
 {
-    xTimers[0] = xTimerCreate("Timer 1", 1, pdTRUE, (void *) 0, task1);
-    xTimers[1] = xTimerCreate("Timer 2", 1, pdTRUE, (void *) 0, task2);
+    xTimers[0] = xTimerCreate("Timer 1", 1, pdTRUE, (void *) 0, vTask1);
+    xTimers[1] = xTimerCreate("Timer 2", 1, pdTRUE, (void *) 0, vTask2);
 
     xTimerStart(xTimers[0], 0);
     xTimerStart(xTimers[1], 0);

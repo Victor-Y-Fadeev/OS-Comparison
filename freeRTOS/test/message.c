@@ -17,9 +17,11 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/timers.h"
+#include "freertos/queue.h"
 #include "environment.h"
 
 #define ITER 100
+#define MSG 255
 
 static int var[ITER];
 static int current = 0;
@@ -30,40 +32,36 @@ static long long int curTime = 0;
 static xQueueHandle xQueue = NULL;
 
 
-void vTask1(void *pvParameters)
+void vTask(void *pvParameters)
 {
-    int massage = 0;
+    int massageSend = MSG;
+    int massageReceive = 0;
     portBASE_TYPE xStatus;
 
     while (current <= ITER) 
     {
-        xStatus = xQueueReceive(xQueue, &massage, 0);
+        xQueueSendToBack(xQueue, &massageSend, 0);
+
+        prevTime = esp_timer_get_time();
+        xStatus = xQueueReceive(xQueue, &massageReceive, 0);
         curTime = esp_timer_get_time();
 
         if (xStatus == pdPASS)
         {
+            if (massageReceive == 0)
+            {
+                error("Massage failed!");
+            }
+            massageReceive = 0;
+
             var[current] = curTime - prevTime;
             current++;
-
             if (current == ITER)
             {
                 output("Full message test", var, ITER);
                 vTaskDelete(NULL);
-            }
-            
+            } 
         }
-    }
-    vTaskDelete(NULL);
-}
-
-void vTask2 (void *pvParameters)
-{
-    int massage = 255;
-  
-    while (current <= ITER) 
-    {
-        prevTime = esp_timer_get_time();
-        xQueueSendToBack(xQueue, &massage,0);
     }
 
     vTaskDelete(NULL);
@@ -75,7 +73,6 @@ void app_main(void)
 
     if (xQueue != NULL) 
     {
-        xTaskCreate(vTask1, "Task1", 10000, NULL, 1, NULL);
-        xTaskCreate(vTask2, "Task2", 10000, NULL, 1, NULL);
+        xTaskCreate(vTask, "Task", 10000, NULL, 1, NULL);
     }
 }

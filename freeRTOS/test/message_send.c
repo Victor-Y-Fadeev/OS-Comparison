@@ -17,9 +17,11 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/timers.h"
+#include "freertos/queue.h"
 #include "environment.h"
 
 #define ITER 100
+#define MSG 255
 
 static int var[ITER];
 static int current = 0;
@@ -32,7 +34,7 @@ static xQueueHandle xQueue = NULL;
 
 void vTask(void *pvParameters)
 {
-    int massageSend = 1;
+    int massageSend = MSG;
     int massageReceive = 0;
     portBASE_TYPE xStatus;
 

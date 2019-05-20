@@ -24,7 +24,6 @@
 
 static int var[ITER];
 static int current = 0;
-static int flag = 0;
 
 static long long int prevTime = 0;
 static long long int curTime = 0;

@@ -36,6 +36,8 @@ void vTask1(void *pvParameters)
         vTaskDelay(5);
     }
 
+    output("Processes switching test", var, ITER);
+
     vTaskDelete(NULL);
 }
 
@@ -54,14 +56,12 @@ void vTask2(void *pvParameters)
             current++;
         }
     }
-
-    output("Processes switching test", var, ITER);
     
     vTaskDelete(NULL);
 }
 
 void app_main(void)
 {
-    xTaskCreate(vTask1, "Task1", 10000, NULL, 2, NULL);
-    xTaskCreate(vTask2, "Task2", 10000, NULL, 1, NULL);
+    xTaskCreate(vTask1, "Task 1", 10000, NULL, 2, NULL);
+    xTaskCreate(vTask2, "Task 2", 10000, NULL, 1, NULL);
 }
