@@ -18,26 +18,34 @@
 #include "environment.h"
 
 
-void output(const char *str, const int *var, const bool log)
+void output(const char *str, int *var, int iter)
 {
+    var = &var[1];
+    iter--;
+
     printf("\r\n---%s---\r\n", str);
     printf("CPU frequency: %d MHz\r\n", XT_CLOCK_FREQ / 1000000);
     printf("Tick rate: %d Hz\r\n", configTICK_RATE_HZ);
-    printf("Iterations: %d\r\n", ITER);
+    printf("Iterations: %d\r\n", iter);
 
     int average = 0;
-    for (int i = 1; i < ITER; i++)
+    for (int i = 0; i < iter; i++)
     {
         average += var[i];
     }
-    printf("Average: %.2f us\r\n\r\n", ((double) average) / (ITER - 1));
+    printf("Average: %.2f us\r\n", ((double) average) / iter);
 
-    if (log)
+    double variance = 0;
+    for (int i = 0; i < iter; i++)
     {
-        for (int i = 0; i < ITER; i++)
-        {
-            printf("#%d switch - %d microsecond\r\n", i, var[i]);
-        }
+        double temp = var[i] - ((double) average) / iter;
+        variance += temp * temp;
+    }
+    printf("Variance: %.2f us\r\n\r\n", variance / iter);
+
+    for (int i = 0; i < iter; i++)
+    {
+        printf("#%d switch - %d microsecond\r\n", i, var[i]);
     }
 }
 

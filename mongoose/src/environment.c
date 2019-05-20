@@ -18,22 +18,27 @@
 #include "environment.h"
 
 
-void output(const char *str, const int *var, const bool log) {
+void output(const char *str, int *var, int iter) {
     mgos_uart_printf(UART_NO, "\r\n---%s---\r\n", str);
     mgos_uart_printf(UART_NO, "CPU frequency: %d MHz\r\n", XT_CLOCK_FREQ / 1000000);
     mgos_uart_printf(UART_NO, "Tick rate: %d Hz\r\n", configTICK_RATE_HZ);
-    mgos_uart_printf(UART_NO, "Iterations: %d\r\n", ITER);
+    mgos_uart_printf(UART_NO, "Iterations: %d\r\n", iter);
 
     int average = 0;
-    for (int i = 1; i < ITER; i++) {
+    for (int i = 0; i < iter; i++) {
         average += var[i];
     }
-    mgos_uart_printf(UART_NO, "Average: %.2f us\r\n\r\n", ((double) average) / (ITER - 1));
+    mgos_uart_printf(UART_NO, "Average: %.2f us\r\n", ((double) average) / iter);
 
-    if (log) {
-        for (int i = 0; i < ITER; i++) {
-            mgos_uart_printf(UART_NO, "#%d switch - %d microsecond\r\n", i, var[i]);
-        }
+    double variance = 0;
+    for (int i = 0; i < iter; i++) {
+        double temp = var[i] - ((double) average) / iter;
+        variance += temp * temp;
+    }
+    mgos_uart_printf(UART_NO, "Variance: %.2f us\r\n\r\n", variance / iter);
+
+    for (int i = 0; i < iter; i++) {
+        mgos_uart_printf(UART_NO, "#%d switch - %d microsecond\r\n", i, var[i]);
     }
 }
 

@@ -22,10 +22,9 @@
 #include "mgos_uart.h"
 
 #define UART_NO 0
-#define ITER 100
 
 
-void output(const char *str, const int *var, const bool log);
+void output(const char *str, int *var, int iter);
 void single(const char *str, const double average);
 void error(const char *str);
 
