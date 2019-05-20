@@ -19,6 +19,7 @@
 #include "freertos/timers.h"
 #include "environment.h"
 
+#define ITER 100
 #define NUM_TIMERS 2
 
 static int var[ITER];
@@ -51,7 +52,7 @@ static void vTask2(void *pvParameters)
 
     if (current == ITER)
     {
-        output("Timers test switching", var, true);
+        output("Timers test switching", var, ITER);
 
         xTimerStop(xTimers[0], 0);
         xTimerStop(xTimers[1], 0);

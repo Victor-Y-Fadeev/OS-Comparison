@@ -20,6 +20,8 @@
 #include "freertos/semphr.h"
 #include "environment.h"
 
+#define ITER 100
+
 static int var[ITER];
 static int current = 0;
 static int flag = 0;
@@ -45,7 +47,7 @@ void vTask(void *pvParameters)
             
         if (current == ITER)
         {
-            output("Give semaphore test", var, true);
+            output("Give semaphore test", var, ITER);
             vTaskDelete(NULL);
         }
     }

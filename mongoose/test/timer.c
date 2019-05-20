@@ -20,6 +20,8 @@
 #include "mgos_time.h"
 #include "environment.h"
 
+#define ITER 100
+
 static int var[ITER];
 static int current = 0;
 
@@ -47,7 +49,7 @@ static void task_2(void *arg) {
     flag = 0;
 
     if (current == ITER) {
-        output("Timers test switching", var, true);
+        output("Timers test switching", var, ITER);
 
         mgos_clear_timer(timer_1);
         mgos_clear_timer(timer_2);

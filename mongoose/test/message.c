@@ -20,6 +20,8 @@
 #include "mgos_time.h"
 #include "environment.h"
 
+#define ITER 100
+
 static int var[ITER];
 static int current = 0;
 
@@ -48,7 +50,7 @@ static void task_1(void *arg) {
     current++;
 
     if (current == ITER) {
-        output("Full message test", var, true);
+        output("Full message test", var, ITER);
 
         mbuf_free(&msg_mbuf);
         mgos_clear_timer(timer_2);

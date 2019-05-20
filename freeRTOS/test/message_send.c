@@ -19,6 +19,8 @@
 #include "freertos/timers.h"
 #include "environment.h"
 
+#define ITER 100
+
 static int var[ITER];
 static int current = 0;
 
@@ -54,7 +56,7 @@ void vTask(void *pvParameters)
             current++;
             if (current == ITER)
             {
-                output("Send message test", var, true);
+                output("Send message test", var, ITER);
                 vTaskDelete(NULL);
             }
             

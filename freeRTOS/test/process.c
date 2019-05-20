@@ -19,6 +19,8 @@
 #include "freertos/timers.h"
 #include "environment.h"
 
+#define ITER 100
+
 static int var[ITER];
 static int current = 0;
 
@@ -53,7 +55,7 @@ void vTask2(void *pvParameters)
         }
     }
 
-    output("Processes switching test", var, true);
+    output("Processes switching test", var, ITER);
     
     vTaskDelete(NULL);
 }

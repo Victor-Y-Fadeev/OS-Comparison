@@ -21,6 +21,8 @@
 #include "mgos_time.h"
 #include "environment.h"
 
+#define ITER 100
+
 static int var[ITER];
 static int current = 0;
 
@@ -43,7 +45,7 @@ static void task(void *arg) {
     current++;
 
     if (current == ITER) {
-        output("Take semaphore test", var, true);
+        output("Take semaphore test", var, ITER);
 
         mgos_rlock_destroy(lock);
         mgos_clear_timer(timer);

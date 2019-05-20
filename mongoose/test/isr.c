@@ -21,6 +21,7 @@
 #include "mgos_time.h"
 #include "environment.h"
 
+#define ITER 100
 #define EVENT_ISR MGOS_EVENT_BASE('I', 'S', 'R')
 
 static long long int prev_time = 0;
