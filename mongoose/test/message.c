@@ -21,6 +21,7 @@
 #include "environment.h"
 
 #define ITER 100
+#define MSG 255
 
 static int var[ITER];
 static int current = 0;
@@ -44,6 +45,10 @@ static void task_1(void *arg) {
     mbuf_remove(&msg_mbuf, sizeof(int));
     cur_time = mgos_uptime_micros();
 
+    if (msg != MSG) {
+        error("Messages not working!");
+    }
+
     flag = 0;
 
     var[current] = cur_time - prev_time;
@@ -59,7 +64,7 @@ static void task_1(void *arg) {
 }
 
 static void task_2(void *arg) {
-    const int msg = 255;
+    const int msg = MSG;
 
     if (flag == 0) {
         flag = 1;

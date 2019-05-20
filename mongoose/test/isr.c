@@ -21,7 +21,7 @@
 #include "mgos_time.h"
 #include "environment.h"
 
-#define ITER 100
+#define ITER 1000
 #define EVENT_ISR MGOS_EVENT_BASE('I', 'S', 'R')
 
 static long long int prev_time = 0;
@@ -45,13 +45,13 @@ static void task(void *arg) {
     }
     cur_time = mgos_uptime_micros();
 
-    average = curTime - prevTime;
+    average = cur_time - prev_time;
 
     prev_time = mgos_uptime_micros();
     for (int i = 0; i < ITER; i++);
     cur_time = mgos_uptime_micros();
 
-    average = (average - curTime + prevTime) / ITER;
+    average = (average - cur_time + prev_time) / ITER;
 
     single("ISR test", average);
     mgos_clear_timer(timer);

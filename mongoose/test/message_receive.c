@@ -21,6 +21,7 @@
 #include "environment.h"
 
 #define ITER 100
+#define MSG 255
 
 static int var[ITER];
 static int current = 0;
@@ -34,7 +35,7 @@ struct mbuf msg_mbuf;
 
 
 static void task(void *arg) {
-    int msg = 255;
+    int msg = MSG;
 
     mbuf_append(&msg_mbuf, &msg, sizeof(int));
 

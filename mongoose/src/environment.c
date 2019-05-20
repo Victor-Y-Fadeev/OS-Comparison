@@ -19,6 +19,9 @@
 
 
 void output(const char *str, int *var, int iter) {
+    var = &var[1];
+    iter--;
+
     mgos_uart_printf(UART_NO, "\r\n---%s---\r\n", str);
     mgos_uart_printf(UART_NO, "CPU frequency: %d MHz\r\n", XT_CLOCK_FREQ / 1000000);
     mgos_uart_printf(UART_NO, "Tick rate: %d Hz\r\n", configTICK_RATE_HZ);
