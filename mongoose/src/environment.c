@@ -38,7 +38,7 @@ void output(const char *str, int *var, int iter) {
         double temp = var[i] - ((double) average) / iter;
         variance += temp * temp;
     }
-    mgos_uart_printf(UART_NO, "Variance: %.2f us\r\n\r\n", variance / iter);
+    mgos_uart_printf(UART_NO, "Variance: %.2f\r\n\r\n", variance / iter);
 
     for (int i = 0; i < iter; i++) {
         mgos_uart_printf(UART_NO, "#%d switch - %d microsecond\r\n", i, var[i]);

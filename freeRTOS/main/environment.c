@@ -41,7 +41,7 @@ void output(const char *str, int *var, int iter)
         double temp = var[i] - ((double) average) / iter;
         variance += temp * temp;
     }
-    printf("Variance: %.2f us\r\n\r\n", variance / iter);
+    printf("Variance: %.2f\r\n\r\n", variance / iter);
 
     for (int i = 0; i < iter; i++)
     {

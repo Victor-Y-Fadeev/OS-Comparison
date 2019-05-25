@@ -199,7 +199,7 @@ line()
         mongoose_average="*${mongoose_average:9}*"
     fi
 
-    echo "| $name | ${freertos_average/us/µs} | ${freertos_variance/us/µs} | ${mongoose_average/us/µs} | ${mongoose_variance/us/µs} |" >> $RESULT
+    echo "| $name | ${freertos_average/us/µs} | $freertos_variance | ${mongoose_average/us/µs} | $mongoose_variance |" >> $RESULT
 }
 
 table()
