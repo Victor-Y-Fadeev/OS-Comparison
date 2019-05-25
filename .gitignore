@@ -2,6 +2,10 @@
 **/sdkconfig
 **/sdkconfig.old
 **/build
+**/.mos
+
+# Logging files
+**/log
 
 # VS Code Settings
 .vscode/
