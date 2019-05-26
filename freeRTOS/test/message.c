@@ -32,38 +32,42 @@ static long long int curTime = 0;
 static xQueueHandle xQueue = NULL;
 
 
-void vTask(void *pvParameters)
+void vTask1(void *pvParameters)
 {
-    int massageSend = MSG;
-    int massageReceive = 0;
+    int message = MSG;
+  
+    while (current < ITER) 
+    {
+        prevTime = esp_timer_get_time();
+        xQueueSendToBack(xQueue, &message, 0);
+    }
+
+    vTaskDelete(NULL);
+}
+
+void vTask2(void *pvParameters)
+{
+    int message = 0;
     portBASE_TYPE xStatus;
 
     while (current <= ITER) 
     {
-        xQueueSendToBack(xQueue, &massageSend, 0);
-
-        prevTime = esp_timer_get_time();
-        xStatus = xQueueReceive(xQueue, &massageReceive, 0);
+        xStatus = xQueueReceive(xQueue, &message, 0);
         curTime = esp_timer_get_time();
 
         if (xStatus == pdPASS)
         {
-            if (massageReceive == 0)
-            {
-                error("Massage failed!");
-            }
-            massageReceive = 0;
-
             var[current] = curTime - prevTime;
             current++;
+
             if (current == ITER)
             {
                 output("Full message test", var, ITER);
                 vTaskDelete(NULL);
-            } 
+            }
+            
         }
     }
-
     vTaskDelete(NULL);
 }
 
@@ -73,6 +77,7 @@ void app_main(void)
 
     if (xQueue != NULL) 
     {
-        xTaskCreate(vTask, "Task", 10000, NULL, 1, NULL);
+        xTaskCreate(vTask1, "Task 1", 10000, NULL, 1, NULL);
+        xTaskCreate(vTask2, "Task 2", 10000, NULL, 1, NULL);
     }
 }
