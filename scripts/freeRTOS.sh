@@ -3,7 +3,7 @@
 DIR="/opt/Espressif"
 
 # Install Prerequisites
-sudo apt-get -y install gcc git wget make minicom libncurses-dev flex bison gperf python python-pip python-setuptools python-serial python-cryptography python-future python-pyparsing python-pyelftools
+sudo apt-get -y install gcc git wget make minicom libncurses-dev flex bison gperf python python3 python-pip python-setuptools python-serial python-cryptography python-future python-pyparsing python-pyelftools
 
 # Toolchain Setup
 sudo mkdir -p $DIR
